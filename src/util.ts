@@ -1,8 +1,6 @@
 import { config } from "./config.js";
 import { logger } from "./logger.js";
 
-export const SEC_TO_MS = 1000;
-
 export function isNightTime(): boolean {
     const currentHour = new Date().getHours();
     if (config.nightPeriodStart > config.nightPeriodEnd)

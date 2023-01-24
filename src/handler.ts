@@ -1,8 +1,9 @@
 import { config } from "./config.js";
+import { SEC_TO_MS } from "./constants.js";
 import { openDoor } from "./door.js";
 import { logger } from "./logger.js";
 import { clearPinTimeout, LoginStage, resetState, state } from "./state.js";
-import { isNightTime, SEC_TO_MS } from "./util.js";
+import { isNightTime } from "./util.js";
 
 export function handleInput(data: string): void {
     switch (state.loginStage) {

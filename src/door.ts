@@ -1,11 +1,8 @@
 import { Gpio } from "onoff";
 import { config } from "./config.js";
+import { DOOR_CLOSED, DOOR_OPEN, SEC_TO_MS } from "./constants.js";
 import { logger } from "./logger.js";
 import { resetState, state } from "./state.js";
-import { SEC_TO_MS } from "./util.js";
-
-export const DOOR_OPEN = Gpio.HIGH;
-export const DOOR_CLOSED = Gpio.LOW;
 
 export const doorGpio = new Gpio(config.doorGpioPin, "out");
 
@@ -22,6 +19,6 @@ export function openDoor(): void {
     doorGpio.writeSync(DOOR_OPEN);
     doorCloseTimeout = setTimeout(() => {
         logger.debug("Closing the door");
-        doorGpio.writeSync(DOOR_CLOSED)
+        doorGpio.writeSync(DOOR_CLOSED);
     }, config.doorOpenTime * SEC_TO_MS);
 }

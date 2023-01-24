@@ -1,4 +1,4 @@
-import { EXIT_CONFIG } from "./exitHandler.js";
+import { EXIT_CONFIG } from "./constants.js";
 import { logger } from "./logger.js";
 
 const requiredKeys = [

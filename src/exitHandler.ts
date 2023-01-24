@@ -1,10 +1,7 @@
-import { doorGpio, DOOR_CLOSED } from "./door.js";
+import { DOOR_CLOSED, EXIT_NORMAL } from "./constants.js";
+import { doorGpio } from "./door.js";
 import { logger } from "./logger.js";
 import { trySync } from "./util.js";
-
-export const EXIT_NORMAL = 0;
-export const EXIT_ERROR = 1;
-export const EXIT_CONFIG = 2;
 
 export function addExitHandlers(): void {
     process.on("SIGINT", () => process.exit(EXIT_NORMAL));
