@@ -5,6 +5,8 @@ import { DOOR_CLOSED, DOOR_OPEN, SEC_TO_MS } from "./constants.js";
 import { accessLog, logger } from "./logger.js";
 import { resetState, state } from "./state.js";
 
+// TODO: mock io
+
 export const doorGpio = new Gpio(config.doorGpioPin, "out");
 
 let doorCloseTimeout: NodeJS.Timeout | null = null;

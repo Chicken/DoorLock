@@ -4,6 +4,8 @@ import { handleInput } from "./handler.js";
 import { logger } from "./logger.js";
 import { clearPinTimeout, resetState } from "./state.js";
 
+// TODO: mock io
+
 export function startSerialListener(): void {
     const serial = new SerialPort({
         path: config.serialDevice,

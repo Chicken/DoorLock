@@ -2,9 +2,15 @@ import express from "express";
 import { config } from "./config.js";
 import { logger } from "./logger.js";
 
-// TODO: api (one admin user, viewing logs, adding users, configuring settings)
-// TODO: initial setup via web
-// TODO: react frontend
+// TODO:
+// - monorepo
+// - solidjs frontend
+
+// TODO:
+// - trpc after all
+// - login: localstorage, jwt
+// - api: viewing logs, managing users
+// - log streams: websockets, eventemitter3
 
 export function startApiServer(): void {
     const app = express();
