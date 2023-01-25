@@ -1,4 +1,4 @@
-import type { User } from "./config.js";
+import type { KeyFob } from "@prisma/client";
 
 export const LoginStage = {
     WaitingForFob: "WaitingForFob",
@@ -9,7 +9,7 @@ export type LoginStage = ObjectValues<typeof LoginStage>;
 
 class State {
     public loginStage: LoginStage = LoginStage.WaitingForFob;
-    public loggedInUser: User | null = null;
+    public loggedInUser: KeyFob | null = null;
     public pinTimeout: NodeJS.Timeout | null = null;
 }
 

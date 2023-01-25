@@ -1,14 +1,16 @@
+import { LogType } from "@prisma/client";
 import { config } from "./config.js";
 import { SEC_TO_MS } from "./constants.js";
+import { prisma } from "./db.js";
 import { openDoor } from "./door.js";
-import { logger } from "./logger.js";
+import { accessLog, logger } from "./logger.js";
 import { clearPinTimeout, LoginStage, resetState, state } from "./state.js";
 import { isNightTime } from "./util.js";
 
-export function handleInput(data: string): void {
+export async function handleInput(data: string): Promise<void> {
     switch (state.loginStage) {
         case LoginStage.WaitingForFob:
-            handleFob(data);
+            await handleFob(data);
             break;
         case LoginStage.WaitingForPin:
             handlePin(data);
@@ -16,14 +18,22 @@ export function handleInput(data: string): void {
     }
 }
 
-function handleFob(fob: string): void {
-    if (!config.keyFobs.has(fob)) {
-        logger.log("Unknown fob", fob);
+async function handleFob(fob: string): Promise<void> {
+    const keyFob = await prisma.keyFob.findUnique({
+        where: {
+            id: fob,
+        },
+    });
+    if (!keyFob) {
+        accessLog(LogType.UnknownFob, { fob });
         return;
     }
-    const user = config.keyFobs.get(fob)!;
-    logger.debug("Detected fob for", user.name);
-    state.loggedInUser = user;
+    logger.debug("Detected fob for", keyFob.name);
+    if (!keyFob.enabled) {
+        accessLog(LogType.DisabledFob, { fob: keyFob.id, name: keyFob.name });
+        return;
+    }
+    state.loggedInUser = keyFob;
     if (isNightTime()) {
         logger.debug("It is night time, waiting for pin");
         state.loginStage = LoginStage.WaitingForPin;
@@ -36,7 +46,7 @@ function handleFob(fob: string): void {
 function setPinTimeout(): void {
     clearPinTimeout();
     state.pinTimeout = setTimeout(() => {
-        logger.debug("Timed out waiting for pin");
+        accessLog(LogType.PinTimeout, { fob: state.loggedInUser?.id, name: state.loggedInUser?.name });
         resetState();
     }, config.pinTimeout * SEC_TO_MS);
 }
@@ -45,7 +55,7 @@ function handlePin(data: string): void {
     clearPinTimeout();
     if (!state.loggedInUser) throw new Error("No user while waiting for pin");
     if (data !== state.loggedInUser.pin) {
-        logger.log("Incorrect pin", data, "for", state.loggedInUser.name);
+        accessLog(LogType.IncorrectPin, { fob: state.loggedInUser.id, name: state.loggedInUser.name, pin: data });
         resetState();
         return;
     }

@@ -1,2 +1,3 @@
-// TODO: database (keys and permanent logs)
-// possibly prisma?
+import { PrismaClient } from "@prisma/client";
+
+export const prisma = new PrismaClient();

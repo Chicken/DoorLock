@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model KeyFob {
+  id      String  @id
+  name    String
+  pin     String
+  enabled Boolean @default(true)
+}
+
+enum LogType {
+  UnknownFob
+  DisabledFob
+  IncorrectPin
+  PinTimeout
+  DoorOpened
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime @default(now())
+  type      LogType
+  fob       String?
+  pin       String?
+}

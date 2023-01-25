@@ -15,4 +15,6 @@ block_comment_end = */
 
 [*.yml]
 indent_size = 2
-indent_style = space
+
+[*.prisma]
+indent_size = 2

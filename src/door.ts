@@ -1,7 +1,8 @@
+import { LogType } from "@prisma/client";
 import { Gpio } from "onoff";
 import { config } from "./config.js";
 import { DOOR_CLOSED, DOOR_OPEN, SEC_TO_MS } from "./constants.js";
-import { logger } from "./logger.js";
+import { accessLog, logger } from "./logger.js";
 import { resetState, state } from "./state.js";
 
 export const doorGpio = new Gpio(config.doorGpioPin, "out");
@@ -14,7 +15,7 @@ export function openDoor(): void {
         clearTimeout(doorCloseTimeout);
         doorCloseTimeout = null;
     }
-    logger.success("Opening the door for", state.loggedInUser.name);
+    accessLog(LogType.DoorOpened, { fob: state.loggedInUser.id, name: state.loggedInUser.name });
     resetState();
     doorGpio.writeSync(DOOR_OPEN);
     doorCloseTimeout = setTimeout(() => {
