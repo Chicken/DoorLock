@@ -10,7 +10,9 @@ const requiredKeys = [
     "NIGHT_PERIOD_START",
     "NIGHT_PERIOD_END",
     "API_PORT",
+    "API_PORT_WS",
     "ADMIN_PASSWORD",
+    "JWT_SECRET",
     "DATABASE_URL",
 ] as const;
 const missing = requiredKeys.filter((key) => !process.env[key]);
@@ -28,6 +30,7 @@ export const config = {
     nightPeriodStart: parseInt(process.env.NIGHT_PERIOD_START!, 10),
     nightPeriodEnd: parseInt(process.env.NIGHT_PERIOD_END!, 10),
     apiPort: parseInt(process.env.API_PORT!, 10),
+    apiPortWs: parseInt(process.env.API_PORT_WS!, 10),
     adminPassword: process.env.ADMIN_PASSWORD!,
-    apiHost: process.env.API_HOST || "0.0.0.0",
+    jwtSecret: process.env.JWT_SECRET!,
 } as const;

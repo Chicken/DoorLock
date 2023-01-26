@@ -1,12 +1,9 @@
-import { addExitHandlers } from "./exitHandler.js";
-import { startSerialListener } from "./serial.js";
 import { logger } from "./logger.js";
-import { startApiServer } from "./api.js";
 
-addExitHandlers();
+import "./exitHandler.js";
 
-startSerialListener();
+import "./api.js";
 
-startApiServer();
+import "./serial.js";
 
 logger.success("Started up!");

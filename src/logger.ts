@@ -17,8 +17,18 @@ export const logger = {
     success: (...data: unknown[]) => console.log(`${time()} ${greenBright(dataToString(data))}`),
     error: (...data: unknown[]) => console.error(`${time()} ${redBright(dataToString(data))}`),
     debug: (...data: unknown[]) =>
-        process.env.NODE_ENV === "development" ? console.log(`${time()} ${yellow(dataToString(data))}`) : void 0,
+        process.env.NODE_ENV === "development" || process.env.LOG_LEVEL === "debug"
+            ? console.log(`${time()} ${yellow(dataToString(data))}`)
+            : void 0,
 };
+
+export type SubscriberFn = (data: { type: LogType; fob?: string; pin?: string }) => void;
+const accessLogSubscribers = new Set<SubscriberFn>();
+
+export function accessLogSubscribe(fn: SubscriberFn) {
+    accessLogSubscribers.add(fn);
+    return () => accessLogSubscribers.delete(fn);
+}
 
 export function accessLog(type: LogType, { fob, name, pin }: { fob?: string; name?: string; pin?: string }) {
     switch (type) {
@@ -40,6 +50,7 @@ export function accessLog(type: LogType, { fob, name, pin }: { fob?: string; nam
         default:
             throw new Error("Unhandled log type case");
     }
+
     prisma.log
         .create({
             data: {
@@ -51,4 +62,6 @@ export function accessLog(type: LogType, { fob, name, pin }: { fob?: string; nam
         .catch((err) => {
             logger.error(`Error saving access logs\n${err instanceof Error ? err.stack ?? err.message : String(err)}`);
         });
+
+    accessLogSubscribers.forEach((fn) => fn({ type, fob, pin }));
 }

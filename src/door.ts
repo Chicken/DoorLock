@@ -3,11 +3,10 @@ import { Gpio } from "onoff";
 import { config } from "./config.js";
 import { DOOR_CLOSED, DOOR_OPEN, SEC_TO_MS } from "./constants.js";
 import { accessLog, logger } from "./logger.js";
+import { MockGpio } from "./mocks.js";
 import { resetState, state } from "./state.js";
 
-// TODO: mock io
-
-export const doorGpio = new Gpio(config.doorGpioPin, "out");
+export const doorGpio = process.env.NODE_ENV === "development" ? new MockGpio() : new Gpio(config.doorGpioPin, "out");
 
 let doorCloseTimeout: NodeJS.Timeout | null = null;
 
