@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "lib": ["dom", "esnext"],
+        "jsx": "preserve",
+        "jsxImportSource": "solid-js",
+        "types": ["vite/client"],
+        "noEmit": true,
+        "isolatedModules": true
+    }
+}

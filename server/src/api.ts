@@ -13,8 +13,6 @@ import { prisma } from "./db.js";
 import { accessLogSubscribe, SubscriberFn } from "./logger.js";
 
 // TODO:
-// - monorepo: turborepo
-// - frontend: solidjs
 // - mutations: managing users
 // - docker
 
