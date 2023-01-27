@@ -16,6 +16,7 @@ import { accessLogSubscribe, SubscriberFn } from "./logger.js";
 // - monorepo: turborepo
 // - frontend: solidjs
 // - mutations: managing users
+// - docker
 
 export type AppRouter = typeof appRouter;
 

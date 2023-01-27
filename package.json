@@ -25,6 +25,7 @@
     "scripts": {
         "start": "node --enable-source-maps -r dotenv/config --no-warnings .",
         "dev": "yarn build && NODE_ENV=development yarn start",
+        "dev:watch": "tsc-watch -b --onSuccess \"sh -c 'NODE_ENV=development yarn start'\"",
         "build": "tsc -b",
         "watch": "tsc -b -w",
         "format": "prettier --write . && prisma format",
@@ -97,6 +98,7 @@
         "eslint-config-prettier": "^8.6.0",
         "prettier": "^2.8.3",
         "prisma": "^4.9.0",
+        "tsc-watch": "^6.0.0",
         "typescript": "^4.9.4"
     },
     "packageManager": "yarn@3.3.1"
