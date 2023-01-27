@@ -2,7 +2,7 @@
 
 Electronic door lock system for home automation. Besides the basic functionality (reading key a key fob and opening the door) this project introduces the need for pin codes during a set night time and offers a web interface for managing keys and viewing logs.
 
-Receives key fob readings and pin codes as strings of numbers seperate by newline via serialport. Opens the door by powering a GPIO pin. Runs on a Raspberry Pi Zero W.
+Receives key fob readings and pin codes as strings of numbers seperate by newline via serialport. Opens the door by powering a GPIO pin. Runs on a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/).
 
 This turned from a random project in to a portfolio tier skill show off using as much new and fancy tech as possible. Aims the be very typesafe. The project currently has two parts.
 
