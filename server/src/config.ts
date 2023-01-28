@@ -12,7 +12,6 @@ const requiredKeys = [
     "API_PORT",
     "API_PORT_WS",
     "ADMIN_PASSWORD",
-    "JWT_SECRET",
     "DATABASE_URL",
 ] as const;
 const missing = requiredKeys.filter((key) => !process.env[key]);
@@ -32,5 +31,4 @@ export const config = {
     apiPort: parseInt(process.env.API_PORT!, 10),
     apiPortWs: parseInt(process.env.API_PORT_WS!, 10),
     adminPassword: process.env.ADMIN_PASSWORD!,
-    jwtSecret: process.env.JWT_SECRET!,
 } as const;

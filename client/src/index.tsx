@@ -1,6 +1,17 @@
 /* @refresh reload */
+import { Router } from "@solidjs/router";
 import { render } from "solid-js/web";
-import App from "./App";
+import { client, queryClient, trpcQuery } from "./api.js";
+import { App } from "./components/App.jsx";
 import "./index.css";
 
-render(() => <App />, document.getElementById("root")!);
+render(
+    () => (
+        <trpcQuery.Provider client={client} queryClient={queryClient}>
+            <Router>
+                <App />
+            </Router>
+        </trpcQuery.Provider>
+    ),
+    document.getElementById("root")!
+);

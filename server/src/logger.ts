@@ -1,4 +1,4 @@
-import { LogType } from "@prisma/client";
+import { Log, LogType } from "@prisma/client";
 import { blue, greenBright, redBright, yellow } from "colorette";
 import { inspect } from "node:util";
 import { prisma } from "./db.js";
@@ -18,11 +18,11 @@ export const logger = {
     error: (...data: unknown[]) => console.error(`${time()} ${redBright(dataToString(data))}`),
     debug: (...data: unknown[]) =>
         process.env.NODE_ENV === "development" || process.env.LOG_LEVEL === "debug"
-            ? console.log(`${time()} ${yellow(dataToString(data))}`)
+            ? console.log(`${time()} ${yellow("[DEBUG]")} ${yellow(dataToString(data))}`)
             : void 0,
 };
 
-export type SubscriberFn = (data: { type: LogType; fob?: string; pin?: string }) => void;
+export type SubscriberFn = (data: Log) => void;
 const accessLogSubscribers = new Set<SubscriberFn>();
 
 export function accessLogSubscribe(fn: SubscriberFn) {
@@ -30,7 +30,7 @@ export function accessLogSubscribe(fn: SubscriberFn) {
     return () => accessLogSubscribers.delete(fn);
 }
 
-export function accessLog(type: LogType, { fob, name, pin }: { fob?: string; name?: string; pin?: string }) {
+export function accessLog(type: LogType, { fob, name, pin }: { fob: string; name?: string; pin?: string }) {
     switch (type) {
         case LogType.UnknownFob:
             logger.log("Unknown fob", fob ?? "[unknown]");
@@ -59,9 +59,10 @@ export function accessLog(type: LogType, { fob, name, pin }: { fob?: string; nam
                 pin,
             },
         })
+        .then((entry) => {
+            accessLogSubscribers.forEach((fn) => fn(entry));
+        })
         .catch((err) => {
             logger.error(`Error saving access logs\n${err instanceof Error ? err.stack ?? err.message : String(err)}`);
         });
-
-    accessLogSubscribers.forEach((fn) => fn({ type, fob, pin }));
 }

@@ -7,7 +7,25 @@ import { accessLog, logger } from "./logger.js";
 import { clearPinTimeout, LoginStage, resetState, state } from "./state.js";
 import { isNightTime } from "./util.js";
 
+const WINDOW_LENGTH = 60;
+const WINDOW_SIZE = 10;
+
+let runningCount = 0;
+let ratelimit: NodeJS.Timeout | null = null;
+
 export async function handleInput(data: string): Promise<void> {
+    runningCount++;
+    if (!ratelimit)
+        setTimeout(() => {
+            runningCount = 0;
+            ratelimit = null;
+        }, WINDOW_LENGTH * 1000);
+
+    if (runningCount > WINDOW_SIZE) {
+        logger.debug("Ratelimiting key input");
+        return;
+    }
+
     switch (state.loginStage) {
         case LoginStage.WaitingForFob:
             await handleFob(data);
@@ -46,7 +64,8 @@ async function handleFob(fob: string): Promise<void> {
 function setPinTimeout(): void {
     clearPinTimeout();
     state.pinTimeout = setTimeout(() => {
-        accessLog(LogType.PinTimeout, { fob: state.loggedInUser?.id, name: state.loggedInUser?.name });
+        if (state.loggedInUser)
+            accessLog(LogType.PinTimeout, { fob: state.loggedInUser.id, name: state.loggedInUser.name });
         resetState();
     }, config.pinTimeout * SEC_TO_MS);
 }
