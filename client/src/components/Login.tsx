@@ -22,7 +22,7 @@ export const Login: Component<{ login: Setter<boolean> }> = (props) => {
     }
 
     return (
-        <div class="p-4 bg-slate-300 rounded-md text-center">
+        <div class="rounded-md bg-slate-300 p-4 text-center">
             <h1 class="text-3xl font-medium">Login</h1>
             <form
                 onSubmit={(e) => {
@@ -31,14 +31,14 @@ export const Login: Component<{ login: Setter<boolean> }> = (props) => {
                 }}
             >
                 <input
-                    class="shadow border rounded w-auto py-2 m-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="focus:shadow-outline m-3 w-auto rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                     type="password"
                     placeholder="Password"
                     value={password()}
                     onInput={(e) => setPassword(e.currentTarget.value)}
                 />
                 <button
-                    class="shadow rounded font-bold py-2 px-4 m-3 bg-blue-500 hover:bg-blue-600 text-white"
+                    class="m-3 rounded bg-blue-500 py-2 px-4 font-bold text-white shadow hover:bg-blue-600"
                     onClick={login}
                 >
                     Login

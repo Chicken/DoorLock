@@ -11,9 +11,9 @@ export const App: Component = () => {
         trpc.loggedIn.query().then((data) => setLoggedIn(data));
     });
     return (
-        <div class="flex justify-center items-center min-h-screen bg-slate-200">
-            <div class="max-w-lg w-full">
-                <div class="shadow bg-slate-300 p-6 rounded-lg">
+        <div class="flex min-h-screen items-center justify-center bg-slate-200">
+            <div class="w-full max-w-lg">
+                <div class="rounded-lg bg-slate-300 p-6 shadow">
                     <Routes>
                         <Route
                             path="/"

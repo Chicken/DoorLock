@@ -58,14 +58,14 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
             when={csrfToken.data}
             fallback={
                 <div class="w-full text-center">
-                    <h1 class="text-3xl mb -2font-semibold">Loading...</h1>
+                    <h1 class="mb -2font-semibold text-3xl">Loading...</h1>
                 </div>
             }
         >
-            <div class="text-center max-h-screen relative">
-                <h1 class="text-3xl mb-2 font-semibold">Dashboard</h1>
+            <div class="relative max-h-screen text-center">
+                <h1 class="mb-2 text-3xl font-semibold">Dashboard</h1>
                 <button
-                    class="bg-red-400 py-1 px-2 rounded absolute top-0 right-0"
+                    class="absolute top-0 right-0 rounded bg-red-400 py-1 px-2"
                     onClick={() => {
                         fetch("/api/logout")
                             .then((res) => res.json())
@@ -78,7 +78,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                 </button>
                 <div class="grid grid-cols-2">
                     <button
-                        class={`text-white font-medium py-2 px-4 rounded-t ${
+                        class={`rounded-t py-2 px-4 font-medium text-white ${
                             tab() === "fobs" ? "bg-slate-400" : "bg-slate-500"
                         }`}
                         onClick={() => setTab("fobs")}
@@ -86,7 +86,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                         Fobs
                     </button>
                     <button
-                        class={`text-white font-medium py-2 px-4 rounded-t ${
+                        class={`rounded-t py-2 px-4 font-medium text-white ${
                             tab() === "logs" ? "bg-slate-400" : "bg-slate-500"
                         }`}
                         onClick={() => setTab("logs")}
@@ -94,22 +94,22 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                         Logs
                     </button>
                     {tab() === "fobs" ? (
-                        <div class="col-span-2 bg-slate-400 rounded-b">
+                        <div class="col-span-2 rounded-b bg-slate-400">
                             <Show when={!keyFobs.isLoading && keyFobs.isSuccess} fallback={<p>Loading...</p>}>
                                 <Show when={keyFobs.data?.length} fallback={<p>No fobs to be listed!</p>}>
                                     <For each={keyFobs.data?.sort((a, b) => (a.id > b.id ? 1 : -1))}>
                                         {(keyFob) => (
-                                            <div class="bg-slate-400 m-1 grid grid-cols-9 rounded items-center">
+                                            <div class="m-1 grid grid-cols-9 items-center rounded bg-slate-400">
                                                 {keyFob.enabled ? (
-                                                    <span class="bg-green-400 rounded-full w-4 h-4 m-2 col-span-1" />
+                                                    <span class="col-span-1 m-2 h-4 w-4 rounded-full bg-green-400" />
                                                 ) : (
-                                                    <span class="bg-red-400 rounded-full w-4 h-4 m-2 col-span-1" />
+                                                    <span class="col-span-1 m-2 h-4 w-4 rounded-full bg-red-400" />
                                                 )}
-                                                <span class="m-1 text-white text-xl mx-0 col-span-4 overflow-hidden text-left">
+                                                <span class="col-span-4 m-1 mx-0 overflow-hidden text-left text-xl text-white">
                                                     {keyFob.name}
                                                 </span>
                                                 <button
-                                                    class="bg-blue-500 font-medium text-white m-1 rounded p-1 col-span-2"
+                                                    class="col-span-2 m-1 rounded bg-blue-500 p-1 font-medium text-white"
                                                     onClick={async () => {
                                                         setBeingEdited(structuredClone(keyFob));
                                                     }}
@@ -117,7 +117,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                                     Modify
                                                 </button>
                                                 <button
-                                                    class="bg-red-500 m-1 font-medium text-white rounded p-1 col-span-2"
+                                                    class="col-span-2 m-1 rounded bg-red-500 p-1 font-medium text-white"
                                                     onClick={async () => {
                                                         await trpc.deleteFob.mutate({
                                                             id: keyFob.id,
@@ -135,9 +135,9 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                             </Show>
                         </div>
                     ) : (
-                        <div class="col-span-2 bg-slate-400 text-white  rounded-b p-2 overflow-x-hide overflow-y-scroll max-h-[60vh] text-xs md:text-base">
+                        <div class="overflow-x-hide col-span-2 max-h-[60vh]  overflow-y-scroll rounded-b bg-slate-400 p-2 text-xs text-white md:text-base">
                             <Show when={logs.data} fallback={<p>Loading...</p>}>
-                                <div class="font-bold grid grid-cols-4">
+                                <div class="grid grid-cols-4 font-bold">
                                     <span>Time</span>
                                     <span>Type</span>
                                     <span>Fob</span>
@@ -166,7 +166,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                                         <span>{entry.type.toString()}</span>
                                                         <span
                                                             class={
-                                                                known ? "text-green-400" : "text-red-600 cursor-pointer"
+                                                                known ? "text-green-400" : "cursor-pointer text-red-600"
                                                             }
                                                             {...(known
                                                                 ? {}
@@ -191,10 +191,10 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                     )}
                                 </For>
                                 <Show when={logs.isFetching}>
-                                    <p class="font-semibold text-xs md:text-base">Loading...</p>
+                                    <p class="text-xs font-semibold md:text-base">Loading...</p>
                                 </Show>
                                 <Show when={!logs.hasNextPage}>
-                                    <p class="font-semibold text-xs md:text-base">Reached end of logs</p>
+                                    <p class="text-xs font-semibold md:text-base">Reached end of logs</p>
                                 </Show>
                             </Show>
                         </div>
@@ -203,7 +203,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                 <Show when={beingEdited()}>
                     <div class="fixed inset-0 overflow-y-auto">
                         <div
-                            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 bg-opacity-50 bg-black"
+                            class="flex min-h-screen items-end justify-center bg-black bg-opacity-50 px-4 pt-4 pb-20 text-center sm:block sm:p-0"
                             onClick={(e) => {
                                 if (e.target.isEqualNode(e.currentTarget)) {
                                     setBeingEdited(null);
@@ -211,8 +211,8 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                 }
                             }}
                         >
-                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                            <div class="relative inline-block align-bottom bg-white rounded-lg px-2 pt-3 pb-2 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                            <span class="hidden sm:inline-block sm:h-screen sm:align-middle">&#8203;</span>
+                            <div class="relative inline-block transform overflow-hidden rounded-lg bg-white px-2 pt-3 pb-2 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:align-middle">
                                 <form
                                     class="grid grid-cols-[auto,1fr] items-center justify-items-end"
                                     onSubmit={async (e) => {
@@ -247,7 +247,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                 >
                                     <label>Name</label>
                                     <input
-                                        class="shadow border rounded w-auto py-2 m-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        class="focus:shadow-outline m-3 w-auto rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                                         placeholder="Name"
                                         value={beingEdited()!.name}
                                         onInput={(e) =>
@@ -260,7 +260,7 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                     <label>Pin</label>
                                     <div class="relative">
                                         <input
-                                            class="shadow border rounded w-auto py-2 m-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            class="focus:shadow-outline m-3 w-auto rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                                             type={showPin() ? "text" : "password"}
                                             placeholder=""
                                             value={beingEdited()!.pin}
@@ -272,20 +272,20 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                             }
                                         />
                                         <div
-                                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-700"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-sm leading-5 text-gray-700"
                                             onClick={() => setShowPin((prev) => !prev)}
                                         >
                                             {showPin() ? (
-                                                <Icon path={eye} class="w-6 mx-1" />
+                                                <Icon path={eye} class="mx-1 w-6" />
                                             ) : (
-                                                <Icon path={eyeSlash} class="w-6 mx-1" />
+                                                <Icon path={eyeSlash} class="mx-1 w-6" />
                                             )}
                                         </div>
                                     </div>
                                     <label>Enabled</label>
-                                    <div class="w-full text-left col-span-1">
+                                    <div class="col-span-1 w-full text-left">
                                         <input
-                                            class="shadow border rounded p-2 m-3 focus:ring-0"
+                                            class="m-3 rounded border p-2 shadow focus:ring-0"
                                             type="checkbox"
                                             checked={beingEdited()!.enabled}
                                             onInput={(e) =>
@@ -297,12 +297,12 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                                         />
                                     </div>
                                     <Show when={errorMessage}>
-                                        <div class="col-span-full w-full flex justify-center">
+                                        <div class="col-span-full flex w-full justify-center">
                                             {errorMessage ? <p class="text-red-500">{errorMessage()}</p> : null}
                                         </div>
                                     </Show>
-                                    <div class="col-span-full w-full flex justify-center">
-                                        <button type="submit" class="rounded p-2 bg-blue-500 text-white">
+                                    <div class="col-span-full flex w-full justify-center">
+                                        <button type="submit" class="rounded bg-blue-500 p-2 text-white">
                                             Save
                                         </button>
                                     </div>
