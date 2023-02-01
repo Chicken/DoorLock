@@ -28,19 +28,20 @@ ENV FORCE_COLOR=true
 ENV NODE_ENV="production"
 WORKDIR /app
 
-RUN apk add --no-cache dumb-init python3
+RUN apk add --no-cache dumb-init make g++ python3
 
 COPY .yarn .yarn/
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY server/package.json server/
-COPY client/package.json client/
 
 RUN sed -i 's/"postinstall": "husky install && yarn workspace server prisma generate"/"postinstall": ""/' ./package.json
-RUN yarn workspaces focus --all --production
+RUN yarn workspaces focus --production server
 
-COPY --from=build --chown=node:node /app/dist/ dist/
+COPY --from=build /app/dist/ server/dist/
 
-COPY server/prisma/ prisma/
+COPY server/prisma/ server/prisma/
+
+USER node:node
 
 ENTRYPOINT ["dumb-init", "--"]
 CMD [ "yarn", "workspace", "server", "start:prod" ]
