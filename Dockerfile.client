@@ -4,7 +4,7 @@ ENV CI=true
 ENV FORCE_COLOR=true
 WORKDIR /app
 
-RUN apk add --no-cache && \
+RUN apk add --no-cache \
     make \
     g++ \
     python3

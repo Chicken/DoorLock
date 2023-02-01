@@ -4,7 +4,7 @@ ENV CI=true
 ENV FORCE_COLOR=true
 WORKDIR /app
 
-RUN apk add --no-cache && \
+RUN apk add --no-cache \
     make \
     g++ \
     python3
@@ -38,7 +38,7 @@ COPY client/package.json client/
 
 RUN yarn workspaces focus --all --production
 
-COPY --from=builder --chown=node:node /app/dist/ dist/
+COPY --from=build --chown=node:node /app/dist/ dist/
 
 COPY server/prisma/ prisma/
 
