@@ -4,22 +4,21 @@ ENV CI=true
 ENV FORCE_COLOR=true
 WORKDIR /app
 
-RUN apk add --no-cache \
-    make \
-    g++ \
-    python3
+RUN apk add --no-cache make g++ python3
 
 COPY .yarn .yarn/
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY server/package.json server/
 COPY client/package.json client/
 
+RUN sed -i 's/"postinstall": "husky install && yarn workspace server prisma generate"/"postinstall": ""/' ./package.json
 RUN yarn --immutable
 
 COPY . .
 
 RUN yarn workspace server prisma generate
 RUN yarn workspace server build
+
 
 
 FROM --platform=$TARGETPLATFORM node:18-alpine AS runner
@@ -29,13 +28,14 @@ ENV FORCE_COLOR=true
 ENV NODE_ENV="production"
 WORKDIR /app
 
-RUN apk add --no-cache dumb-init
+RUN apk add --no-cache dumb-init python3
 
 COPY .yarn .yarn/
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY server/package.json server/
 COPY client/package.json client/
 
+RUN sed -i 's/"postinstall": "husky install && yarn workspace server prisma generate"/"postinstall": ""/' ./package.json
 RUN yarn workspaces focus --all --production
 
 COPY --from=build --chown=node:node /app/dist/ dist/
