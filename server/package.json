@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "node --enable-source-maps -r dotenv/config --no-warnings .",
+        "start:prod": "prisma migrate deploy && yarn start",
         "dev": "tsc-watch -b --onSuccess \"sh -c 'NODE_ENV=development yarn start'\"",
         "build": "tsc -b",
         "format": "prisma format",

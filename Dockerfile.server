@@ -1,0 +1,41 @@
+FROM --platform=$BUILDPLATFORM node:18-alpine AS build
+
+ENV CI=true
+ENV FORCE_COLOR=true
+WORKDIR /app
+
+COPY .yarn .yarn/
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY server/package.json server/
+COPY client/package.json client/
+
+RUN yarn --immutable
+
+COPY . .
+
+RUN yarn workspace server prisma generate
+RUN yarn workspace server build
+
+
+FROM --platform=$TARGETPLATFORM node:18-alpine AS runner
+
+ENV CI=true
+ENV FORCE_COLOR=true
+ENV NODE_ENV="production"
+WORKDIR /app
+
+RUN apk add --no-cache dumb-init
+
+COPY .yarn .yarn/
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY server/package.json server/
+COPY client/package.json client/
+
+RUN yarn workspaces focus --all --production
+
+COPY --from=builder --chown=node:node /app/dist/ dist/
+
+COPY server/prisma/ prisma/
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD [ "yarn", "workspace", "server", "start:prod" ]
