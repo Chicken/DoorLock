@@ -1,0 +1,22 @@
+{
+    "name": "Door Lock",
+    "icons": [
+        {
+            "src": "/lock_192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/lock_512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "any maskable"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#e2e8f0",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#94a3b8",
+    "description": "Electronic door lock system for home automation"
+}

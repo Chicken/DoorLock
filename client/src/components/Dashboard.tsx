@@ -93,7 +93,10 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                     {tab() === "fobs" ? (
                         <div class="col-span-2 rounded-b bg-slate-400">
                             <Show when={!keyFobs.isLoading && keyFobs.isSuccess} fallback={<p>Loading...</p>}>
-                                <Show when={keyFobs.data?.length} fallback={<p>No fobs to be listed!</p>}>
+                                <Show
+                                    when={keyFobs.data?.length}
+                                    fallback={<p class="m-2 text-white">No fobs to be listed!</p>}
+                                >
                                     <For each={keyFobs.data?.sort((a, b) => (a.id > b.id ? 1 : -1))}>
                                         {(keyFob) => (
                                             <div class="m-1 grid grid-cols-9 items-center rounded bg-slate-400">
