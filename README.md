@@ -52,4 +52,16 @@ Use the provided `./mock_input.sh` script, provide it a number as an argument.
 
 ## Production
 
-**TODO, PROJECT STILL WORK-IN-PROGRESS**
+### Docker
+
+#### Backend
+
+Needs environmental variables from [`server/.env.example`](./server/.env.example) which you can configure to your liking.
+
+Needs a [PostgreSQL](https://www.postgresql.org/) database instance. A valid [connection url](https://www.prisma.io/docs/concepts/database-connectors/postgresql#connection-url) needs to be used for the `DATABASE_URL` environmental variable.
+
+For access to hardware the container needs to be privileged **or** the devices can be passed manually. The serial device can be passed to the container via the [`--device` flag](https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities) or `docker-compose.yml` [`devices` field](https://docs.docker.com/compose/compose-file/compose-file-v3/#devices). And the GPIO pins can be added by mounting the entire `/sys` directory inside the container.
+
+#### Frontend
+
+The frontend is a simple container which just serves the SPA. It doesn't come with any HTTPS support nor proxying capability, yet the frontend will try to call the API paths `/api/trpc` and `/api/trpc_ws` both which will need to be proxied by an external reverse proxy such as Nginx to the corresponding ports in the backend container.
