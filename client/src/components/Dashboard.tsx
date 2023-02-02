@@ -66,12 +66,9 @@ export const Dashboard: Component<{ login: Setter<boolean> }> = (props) => {
                 <h1 class="mb-2 text-3xl font-semibold">Dashboard</h1>
                 <button
                     class="absolute top-0 right-0 rounded bg-red-400 py-1 px-2"
-                    onClick={() => {
-                        fetch("/api/logout")
-                            .then((res) => res.json())
-                            .then((data) => {
-                                if (data.success) props.login(false);
-                            });
+                    onClick={async () => {
+                        const data = await fetch("/api/logout").then((res) => res.json());
+                        if (data.success) props.login(false);
                     }}
                 >
                     Logout

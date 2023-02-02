@@ -4,8 +4,8 @@ export const Login: Component<{ login: Setter<boolean> }> = (props) => {
     const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
     const [password, setPassword] = createSignal<string>("");
 
-    function login() {
-        fetch("/api/login", {
+    async function login() {
+        const data = await fetch("/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -13,21 +13,18 @@ export const Login: Component<{ login: Setter<boolean> }> = (props) => {
             body: JSON.stringify({
                 password: password(),
             }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) props.login(true);
-                else setErrorMessage(data.error);
-            });
+        }).then((res) => res.json());
+        if (data.success) props.login(true);
+        else setErrorMessage(data.error);
     }
 
     return (
         <div class="rounded-md bg-slate-300 p-4 text-center">
             <h1 class="text-3xl font-medium">Login</h1>
             <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                     e.preventDefault();
-                    login();
+                    await login();
                 }}
             >
                 <input
