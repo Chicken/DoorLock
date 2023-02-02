@@ -1,6 +1,6 @@
 # DoorLock
 
-Electronic door lock system for home automation. Besides the basic functionality (reading key a key fob and opening the door) this project introduces the need for pin codes during a set night time and offers a web interface for managing keys and viewing logs.
+Electronic door lock system for home automation. Besides the basic functionality (reading a key fob and opening the door) this project introduces the need for pin codes during a set night time and offers a web interface for managing keys and viewing logs.
 
 Receives key fob readings and pin codes as strings of numbers seperate by newline via serialport. Opens the door by powering a GPIO pin. Runs on a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/).
 
