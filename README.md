@@ -65,3 +65,10 @@ For access to hardware the container needs to be privileged **or** the devices c
 #### Frontend
 
 The frontend is a simple container which just serves the SPA. It doesn't come with any HTTPS support nor proxying capability, yet the frontend will try to call the API paths `/api/trpc` and `/api/trpc_ws` both which will need to be proxied by an external reverse proxy such as Nginx to the corresponding ports in the backend container.
+
+## TODO
+
+-   [ ] Actually try deploying the docker containers (yeah, haven't tested them)
+-   [ ] Frontend
+    -   [ ] Split dashboard into components (yes, it is over 300 lines)
+    -   [ ] Make it pretty (graphic design ain't my passion)
